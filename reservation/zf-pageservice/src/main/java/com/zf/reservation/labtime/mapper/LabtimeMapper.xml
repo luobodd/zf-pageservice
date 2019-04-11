@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zf.reservation.labtime.mapper.LabtimeMapper">
+		<!-- 获取实验室时间段列表 -->
+	<select id="selectLabtimeList" resultType="com.zf.reservation.labtime.entity.Labtime" parameterType="com.zf.reservation.labtime.entity.Labtime">
+		select t.id,t.time,l.name as labroomName,tea.name as userName,t.create_time,t.status from labtime t
+		left join labroom l
+		on t.labroom_id = l.id
+		left join teacher tea
+		on tea.id = t.create_user
+		where 1 = 1 and t.labroom_id = #{labroom_id}
+<!-- 		<if test="labroomName != '' and labroomName != null">
+			and l.name like '%${name}%'
+		</if> -->
+	</select>
+	
+	<!-- 获取实验室时间段byId -->
+	<select id="getLabtimeById" resultType="com.zf.reservation.labtime.entity.Labtime">
+		select t.id,t.time,l.name as labroomName,tea.name as userName,t.create_time,t.status from labtime t
+		left join labroom l
+		on t.labroom_id = l.id
+		left join teacher tea
+		on tea.id = t.create_user
+		where 1 = 1
+		and t.id = #{id}
+	</select>
+	
+	<update id="changeStatus" parameterType="com.zf.reservation.labtime.entity.Labtime">
+		update labtime set status = #{status} where id = #{id}
+	</update>
+
+</mapper>

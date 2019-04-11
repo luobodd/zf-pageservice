@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.zf.reservation.labroom.mapper.LabroomMapper">
+	<!-- 获取实验室列表 -->
+	<select id="selectLabroomList"
+		resultType="com.zf.reservation.labroom.entity.Labroom"
+		parameterType="com.zf.reservation.labroom.entity.Labroom">
+		select l.id,l.name,la.name as labName,l.status,t.name as userName,l.create_time,l.address,l.person,l.phone
+		from labroom l
+		left join lab la
+		on l.lab_id = la.id
+		left join teacher t
+		on t.id = l.create_user
+		where 1 = 1
+		<if test="labName != '' and labName != null">
+			and la.name like '%${labName}%'
+		</if>
+		<if test="name != '' and name != null">
+			and l.name like '%${name}%'
+		</if>
+	</select>
+
+	<!-- 获取实验室byId -->
+	<select id="getLabroomById"
+		resultType="com.zf.reservation.labroom.entity.Labroom">
+		select l.id,l.name,la.name as labName,l.status,t.name as
+		userName,l.create_time,l.create_user,l.lab_id,l.address,l.person,l.phone,l.remark from labroom l
+		left join
+		lab la
+		on l.lab_id = la.id
+		left join teacher t
+		on t.id = l.create_user
+		where 1 = 1
+		and l.id = #{id}
+	</select>
+</mapper>
